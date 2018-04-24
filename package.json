@@ -20,7 +20,7 @@
     "electron": "^1.8.4"
   },
   "dependencies": {
-    "electron": "~1.7.x",
+    "electron": "~1.8.4",
     "xlsx": "*"
   }
 }
