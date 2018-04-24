@@ -1,45 +1,36 @@
-# electron-quick-start
+# Electron
 
-**Clone and run for a quick way to see Electron in action.**
+This library is compatible with Electron and should just work out of the box.
+The demonstration uses Electron 1.7.5.  The library is added via `require` from
+the render process.  It can also be required from the main process, as shown in
+this demo to render a version string in the About dialog on OSX.
 
-This is a minimal Electron application based on the [Quick Start Guide](https://electronjs.org/docs/tutorial/quick-start) within the Electron documentation.
+The standard HTML5 `FileReader` techniques from the browser apply to Electron.
+This demo includes a drag-and-drop box as well as a file input box, mirroring
+the [SheetJS Data Preview Live Demo](http://oss.sheetjs.com/js-xlsx/)
 
-**Use this app along with the [Electron API Demos](https://electronjs.org/#get-started) app for API code examples to help you get started.**
+The core data in this demo is an editable HTML table.  The readers build up the
+table using `sheet_to_html` (with `editable:true` option) and the writers scrape
+the table using `table_to_book`.
 
-A basic Electron application needs just these files:
+## Reading and Writing Files
 
-- `package.json` - Points to the app's main file and lists its details and dependencies.
-- `main.js` - Starts the app and creates a browser window to render HTML. This is the app's **main process**.
-- `index.html` - A web page to render. This is the app's **renderer process**.
+Since electron provides an `fs` implementation, `readFile` and `writeFile` can
+be used in conjunction with the standard dialog windows.  For example:
 
-You can learn more about each of these components within the [Quick Start Guide](https://electronjs.org/docs/tutorial/quick-start).
+```js
+/* from app code, require('electron').remote calls back to main process */
+var dialog = require('electron').remote.dialog;
 
-## To Use
+/* show a file-open dialog and read the first selected file */
+var o = dialog.showOpenDialog({ properties: ['openFile'] });
+var workbook = XLSX.readFile(o[0]);
 
-To clone and run this repository you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
-
-```bash
-# Clone this repository
-git clone https://github.com/electron/electron-quick-start
-# Go into the repository
-cd electron-quick-start
-# Install dependencies
-npm install
-# Run the app
-npm start
+/* show a file-save dialog and write the workbook */
+var o = dialog.showSaveDialog();
+XLSX.writeFile(workbook, o);
 ```
 
-Note: If you're using Linux Bash for Windows, [see this guide](https://www.howtogeek.com/261575/how-to-run-graphical-linux-desktop-applications-from-windows-10s-bash-shell/) or use `node` from the command prompt.
 
-## Resources for Learning Electron
 
-- [electronjs.org/docs](https://electronjs.org/docs) - all of Electron's documentation
-- [electronjs.org/community#boilerplates](https://electronjs.org/community#boilerplates) - sample starter apps created by the community
-- [electron/electron-quick-start](https://github.com/electron/electron-quick-start) - a very basic starter Electron app
-- [electron/simple-samples](https://github.com/electron/simple-samples) - small applications with ideas for taking them further
-- [electron/electron-api-demos](https://github.com/electron/electron-api-demos) - an Electron app that teaches you how to use Electron
-- [hokein/electron-sample-apps](https://github.com/hokein/electron-sample-apps) - small demo apps for the various Electron APIs
-
-## License
-
-[CC0 1.0 (Public Domain)](LICENSE.md)
+[![Analytics](https://ga-beacon.appspot.com/UA-36810333-1/SheetJS/js-xlsx?pixel)](https://github.com/SheetJS/js-xlsx)
